@@ -6,11 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.AUTHOR;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.DATE;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.ENCLOSURE;
+import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.FEEDS_TABLE;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.LINK;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.THUMBNAIL;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.TITLE;
@@ -26,12 +28,21 @@ public class RssFeedSqlDataSource {
     }
 
     public List<RssItem> getAllRssItems(){
-        return null;
+        List<RssItem> rssItems = new ArrayList<>();
+
+        Cursor cursor = database.query(FEEDS_TABLE, null, null, null, null, null, null);
+
+        while (cursor.moveToNext()){
+            rssItems.add(getRssItemFromCursor(cursor));
+        }
+        cursor.close();
+        return rssItems;
     }
 
     public void saveRssItem(RssItem rssItem) {
         fillContentValues(rssItem);
 
+        database.insertWithOnConflict(FEEDS_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     private void fillContentValues(RssItem rssItem){
