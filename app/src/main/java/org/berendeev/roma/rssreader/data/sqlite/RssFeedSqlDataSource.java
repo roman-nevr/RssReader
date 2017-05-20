@@ -41,8 +41,13 @@ public class RssFeedSqlDataSource {
 
     public void saveRssItem(RssItem rssItem) {
         fillContentValues(rssItem);
-
         database.insertWithOnConflict(FEEDS_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+    }
+
+    public void saveAllRssItems(List<RssItem> rssItems){
+        for (RssItem rssItem : rssItems) {
+            saveRssItem(rssItem);
+        }
     }
 
     private void fillContentValues(RssItem rssItem){

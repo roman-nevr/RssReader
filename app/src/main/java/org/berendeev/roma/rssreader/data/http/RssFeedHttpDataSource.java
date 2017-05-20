@@ -2,6 +2,7 @@ package org.berendeev.roma.rssreader.data.http;
 
 import android.support.v7.appcompat.BuildConfig;
 
+import org.berendeev.roma.rssreader.data.XmlTimeParser;
 import org.berendeev.roma.rssreader.data.entity.HttpRssItem;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import org.xmlpull.v1.XmlPullParser;
@@ -12,12 +13,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class RssFeedHttpDataSource {
+
+    XmlTimeParser timeParser;
+
+    public RssFeedHttpDataSource(XmlTimeParser timeParser) {
+        this.timeParser = timeParser;
+    }
 
     public List<RssItem> getFeed(URL url){
         try {
@@ -44,10 +49,9 @@ public class RssFeedHttpDataSource {
         }
     }
 
-    public boolean isRssAvailabel(URL url){
+    public boolean isRssAvailable(URL url){
         try {
             XmlPullParser xpp = getPullParser(url);
-            List<RssItem> rssItems = new ArrayList<>();
             boolean available = false;
             while (!isDocumentEnd(xpp) && !available){
                 xpp.next();
@@ -82,9 +86,9 @@ public class RssFeedHttpDataSource {
         if (pubDate.isEmpty()){
             return 0;
         }
-        SimpleDateFormat parser = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZ", Locale.ENGLISH);
+//        SimpleDateFormat parser = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZ", Locale.ENGLISH);
         try {
-            return parser.parse(pubDate).getTime();
+            return timeParser.parse(pubDate);
         } catch (ParseException e) {
             e.printStackTrace();
             return 0;
@@ -106,7 +110,6 @@ public class RssFeedHttpDataSource {
                 }
             }
             httpRssItem.setField(tag, text.trim());
-            System.out.println(tag + " " + text.trim());
         }
     }
 
