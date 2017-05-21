@@ -13,6 +13,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
     //ID | CARD | DATE
     public static final String FEEDS_TABLE = "feeds";
     public static final String LINK = "link";
+    public static final String DESCRIPTION = "description";
     public static final String TITLE = "title";
     public static final String AUTHOR = "author";
     public static final String DATE = "time";
@@ -27,6 +28,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
         String script = "create table " + FEEDS_TABLE + " (" +
                 LINK + " text primary key, " +
                 TITLE + " text not null, " +
+                DESCRIPTION + " text not null, " +
                 AUTHOR + " text not null, " +
                 DATE + " text not null, " +
                 THUMBNAIL + " text not null, " +

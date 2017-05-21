@@ -7,6 +7,8 @@ public class HttpRssItem {
 
     private  String author;
 
+    private String description;
+
     private  String pubDate;
 
     private  String thumbnail;
@@ -16,6 +18,7 @@ public class HttpRssItem {
     public HttpRssItem() {
         title = "";
         link = "";
+        description = "";
         author = "";
         pubDate = "";
         thumbnail = "";
@@ -30,6 +33,10 @@ public class HttpRssItem {
             }
             case "link" :{
                 link = value;
+                break;
+            }
+            case "description" :{
+                description = value;
                 break;
             }
             case "author" :{
@@ -57,6 +64,10 @@ public class HttpRssItem {
 
     public String getLink() {
         return link;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getAuthor() {

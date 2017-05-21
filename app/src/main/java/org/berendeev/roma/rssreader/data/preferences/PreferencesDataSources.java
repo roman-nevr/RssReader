@@ -21,6 +21,6 @@ public class PreferencesDataSources {
     }
 
     public String getLink(){
-        return rssLinkPreferences.getString(LINK, "");
+        return rssLinkPreferences.getString(LINK, "http://feeds.pcworld.com/pcworld/latestnews");
     }
 }

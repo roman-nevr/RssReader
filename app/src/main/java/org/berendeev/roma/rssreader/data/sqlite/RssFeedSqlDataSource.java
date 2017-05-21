@@ -9,8 +9,11 @@ import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.AUTHOR;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.DATE;
+import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.DESCRIPTION;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.ENCLOSURE;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.FEEDS_TABLE;
 import static org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper.LINK;
@@ -50,10 +53,26 @@ public class RssFeedSqlDataSource {
         }
     }
 
+    public RssItem getRssItem(String link){
+        String selection = String.format("%1s = ?", LINK);
+        String[] selectionArgs = {link};
+        Cursor cursor = null;
+        RssItem rssItem;
+        cursor = database.query(FEEDS_TABLE, null, selection, selectionArgs, null, null, null, null);
+        if(cursor.moveToFirst()){
+            rssItem = getRssItemFromCursor(cursor);
+        }else {
+            rssItem = RssItem.EMPTY;
+        }
+        cursor.close();
+        return rssItem;
+    }
+
     private void fillContentValues(RssItem rssItem){
         contentValues.clear();
         contentValues.put(LINK, rssItem.link());
         contentValues.put(TITLE, rssItem.title());
+        contentValues.put(DESCRIPTION, rssItem.title());
         contentValues.put(AUTHOR, rssItem.author());
         contentValues.put(DATE, rssItem.pubDate());
         contentValues.put(THUMBNAIL, rssItem.thumbnail());
@@ -64,6 +83,7 @@ public class RssFeedSqlDataSource {
 
         int titleIndex = cursor.getColumnIndex(TITLE);
         int linkIndex = cursor.getColumnIndex(LINK);
+        int descriptionIndex = cursor.getColumnIndex(DESCRIPTION);
         int authorIndex = cursor.getColumnIndex(AUTHOR);
         int dateIndex = cursor.getColumnIndex(DATE);
         int thumbnailIndex = cursor.getColumnIndex(THUMBNAIL);
@@ -71,6 +91,7 @@ public class RssFeedSqlDataSource {
         return RssItem.create(
                 cursor.getString(titleIndex),
                 cursor.getString(linkIndex),
+                cursor.getString(descriptionIndex),
                 cursor.getString(authorIndex),
                 cursor.getLong(dateIndex),
                 cursor.getString(thumbnailIndex),

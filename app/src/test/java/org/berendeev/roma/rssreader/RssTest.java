@@ -2,11 +2,12 @@ package org.berendeev.roma.rssreader;
 
 import android.content.Context;
 
-import org.berendeev.roma.rssreader.data.XmlTimeParser;
+import org.berendeev.roma.rssreader.domain.XmlTimeParser;
 import org.berendeev.roma.rssreader.data.http.RssFeedHttpDataSource;
 import org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper;
 import org.berendeev.roma.rssreader.data.sqlite.RssFeedSqlDataSource;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,7 +65,7 @@ public class RssTest {
 
     @Test
     public void save_rss_item(){
-        RssItem rssItem = RssItem.create("title", "link", "me", System.currentTimeMillis(), "", "");
+        RssItem rssItem = RssItem.create("title", "link", "description", "me", System.currentTimeMillis(), "", "");
         DatabaseOpenHelper openHelper = new DatabaseOpenHelper(context);
         RssFeedSqlDataSource sqlDataSource = new RssFeedSqlDataSource(openHelper);
 
@@ -72,6 +73,8 @@ public class RssTest {
 
 
         System.out.println(sqlDataSource.getAllRssItems());
+
+        Assert.assertTrue(sqlDataSource.getAllRssItems().size() == 1);
     }
 
 

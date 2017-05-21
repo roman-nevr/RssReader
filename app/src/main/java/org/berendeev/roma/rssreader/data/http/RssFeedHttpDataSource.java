@@ -2,7 +2,7 @@ package org.berendeev.roma.rssreader.data.http;
 
 import android.support.v7.appcompat.BuildConfig;
 
-import org.berendeev.roma.rssreader.data.XmlTimeParser;
+import org.berendeev.roma.rssreader.domain.XmlTimeParser;
 import org.berendeev.roma.rssreader.data.entity.HttpRssItem;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import org.xmlpull.v1.XmlPullParser;
@@ -76,6 +76,7 @@ public class RssFeedHttpDataSource {
         return RssItem.create(
                 httpRssItem.getTitle(),
                 httpRssItem.getLink(),
+                httpRssItem.getDescription(),
                 httpRssItem.getAuthor(),
                 parsePubDate(httpRssItem.getPubDate()),
                 httpRssItem.getThumbnail(),

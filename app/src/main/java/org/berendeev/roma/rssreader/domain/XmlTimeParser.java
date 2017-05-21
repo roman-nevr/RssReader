@@ -1,4 +1,4 @@
-package org.berendeev.roma.rssreader.data;
+package org.berendeev.roma.rssreader.domain;
 
 import java.text.ParseException;
 

@@ -17,6 +17,8 @@ public interface RssFeedRepository {
 
     Completable updateFeed();
 
+    Single<RssItem> getRssItem(String link);
+
     Observable<List<RssItem>> getFeedObservable();
 
     Completable clearOldFromDate(long date);

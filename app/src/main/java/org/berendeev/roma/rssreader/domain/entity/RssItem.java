@@ -1,15 +1,17 @@
 package org.berendeev.roma.rssreader.domain.entity;
 
-import android.graphics.Bitmap;
-
 import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class RssItem {
 
+    public static RssItem EMPTY = create("", "", "", "", 0, "", "");
+
     public abstract String title();
 
     public abstract String link();
+
+    public abstract String description();
 
     public abstract String author();
 
@@ -19,10 +21,11 @@ public abstract class RssItem {
 
     public abstract String enclosure();
 
-    public static RssItem create(String title, String link, String author, long pubDate, String thumbnail, String enclosure) {
+    public static RssItem create(String title, String link, String description, String author, long pubDate, String thumbnail, String enclosure) {
         return builder()
                 .title(title)
                 .link(link)
+                .description(description)
                 .author(author)
                 .pubDate(pubDate)
                 .thumbnail(thumbnail)
@@ -38,6 +41,8 @@ public abstract class RssItem {
         public abstract Builder title(String title);
 
         public abstract Builder link(String link);
+
+        public abstract Builder description(String description);
 
         public abstract Builder author(String author);
 
