@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/refresh_container"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="org.berendeev.roma.rssreader.presentation.activity.MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.berendeev.roma.rssreader.presentation.activity.MainActivity">
+    android:orientation="vertical"
+    >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:gravity="end|center_vertical"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_weight="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/settings"
+            app:layout_constraintTop_toTopOf="parent"
+            android:ellipsize="end"
+            android:paddingLeft="16dp"
+            android:textSize="@dimen/title_text_size"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:gravity="center_vertical"
+            tools:text="@string/lorem_ipsum"
+            />
+        <ImageButton
+            android:id="@id/settings"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            app:srcCompat="@drawable/ic_settings"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem = "@layout/rss_record_item"
-        />
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem = "@layout/rss_record_item"
+            />
 
-</android.support.v4.widget.SwipeRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

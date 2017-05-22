@@ -61,4 +61,7 @@ dependencies {
     compile 'com.google.dagger:dagger:2.6'
     //Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
+    //OkHttp
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
 }

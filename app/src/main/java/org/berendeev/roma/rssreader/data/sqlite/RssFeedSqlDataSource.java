@@ -44,7 +44,7 @@ public class RssFeedSqlDataSource {
 
     public void saveRssItem(RssItem rssItem) {
         fillContentValues(rssItem);
-        database.insertWithOnConflict(FEEDS_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+        database.insertWithOnConflict(FEEDS_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public void saveAllRssItems(List<RssItem> rssItems){
@@ -72,7 +72,7 @@ public class RssFeedSqlDataSource {
         contentValues.clear();
         contentValues.put(LINK, rssItem.link());
         contentValues.put(TITLE, rssItem.title());
-        contentValues.put(DESCRIPTION, rssItem.title());
+        contentValues.put(DESCRIPTION, rssItem.description());
         contentValues.put(AUTHOR, rssItem.author());
         contentValues.put(DATE, rssItem.pubDate());
         contentValues.put(THUMBNAIL, rssItem.thumbnail());

@@ -1,7 +1,14 @@
 package org.berendeev.roma.rssreader;
 
+import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 public class Util {
     @SuppressWarnings("deprecation")
@@ -13,5 +20,36 @@ public class Util {
             result = Html.fromHtml(html);
         }
         return result;
+    }
+
+    public static void loadImage(Context context, String imageUrl, ImageView into){
+        Picasso.with(context)
+                .load(imageUrl)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(into, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onError() {
+                        //Try again online if cache failed
+                        Picasso.with(context)
+                                .load(imageUrl)
+//                                .error(R.drawable.header)
+                                .into(into, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        if (BuildConfig.DEBUG){
+                                            Log.v("Picasso","Could not fetch image");
+                                        }
+                                    }
+                                });
+                    }
+                });
     }
 }

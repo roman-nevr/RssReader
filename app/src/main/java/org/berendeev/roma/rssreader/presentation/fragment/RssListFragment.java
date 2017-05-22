@@ -9,8 +9,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.domain.RssFeedRepository;
@@ -18,7 +22,8 @@ import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import org.berendeev.roma.rssreader.presentation.App;
 import org.berendeev.roma.rssreader.presentation.adapter.RssListAdapter;
 import org.berendeev.roma.rssreader.presentation.controller.RssListController;
-import org.berendeev.roma.rssreader.presentation.router.RssListRouter;
+import org.berendeev.roma.rssreader.presentation.router.Navigator;
+import org.berendeev.roma.rssreader.presentation.router.Navigator.RssListRouter;
 
 import java.util.List;
 
@@ -33,6 +38,7 @@ public class RssListFragment extends Fragment{
 
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.refresh_container) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.settings) ImageButton settings;
 
     private RssListAdapter adapter;
     private RssFeedRepository repository;
@@ -56,14 +62,22 @@ public class RssListFragment extends Fragment{
     @Override public void onStart() {
         super.onStart();
         subscribeOnRssFeed();
-        updateFeed();
+//        updateFeed();
     }
 
     @Override public void onStop() {
         super.onStop();
         compositeDisposable.clear();
+
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+    }
 
     private void subscribeOnRssFeed() {
         compositeDisposable.add(repository
@@ -101,16 +115,22 @@ public class RssListFragment extends Fragment{
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
+        if (adapter != null){
+            recyclerView.setAdapter(adapter);
+        }
 
         refreshLayout.setOnRefreshListener(() -> {
             updateFeed();
         });
 
+        settings.setOnClickListener(v -> {
+            controller.showSettings();
+        });
     }
 
     private void initDi() {
         repository = App.getInstance().getMainComponent().rssFeedRepository();
-        //activity is instance of RssListRouter, we checked it in onAttach()
+        //activity is instance of Navigator, we checked it in onAttach()
         controller = new RssListController((RssListRouter) getActivity());
     }
 }
