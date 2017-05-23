@@ -38,7 +38,7 @@ public class RssListFragment extends Fragment{
 
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.refresh_container) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.settings) ImageButton settings;
+//    @BindView(R.id.settings) ImageButton settings;
 
     private RssListAdapter adapter;
     private RssFeedRepository repository;
@@ -123,9 +123,9 @@ public class RssListFragment extends Fragment{
             updateFeed();
         });
 
-        settings.setOnClickListener(v -> {
-            controller.showSettings();
-        });
+//        settings.setOnClickListener(v -> {
+//            controller.showSettings();
+//        });
     }
 
     private void initDi() {

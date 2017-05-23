@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,11 +41,12 @@ public class RssPreviewFragment extends Fragment {
     @BindView(R.id.image) ImageView image;
     @BindView(R.id.description) TextView description;
 
-    @BindView(R.id.back_button) ImageButton backButton;
-    @BindView(R.id.show_article) Button showArticleButton;
+//    @BindView(R.id.back_button) ImageButton backButton;
+//    @BindView(R.id.show_article) Button showArticleButton;
 
     private RssFeedRepository repository;
     private String link;
+    private RssPreviewController controller;
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
@@ -83,20 +86,24 @@ public class RssPreviewFragment extends Fragment {
         if (!rssItem.enclosure().isEmpty()){
             Util.loadImage(getContext(), rssItem.enclosure(), image);
         }
-        description.setText(Util.fromHtml(rssItem.description()));
+        Spanned spanned = Util.fromHtml(rssItem.description());
+        description.setText(spanned);
     }
 
     private void initUi(View view) {
         ButterKnife.bind(this, view);
         //// TODO: 21.05.17 Back arrow
-        backButton.setOnClickListener(v -> {
-
+//        backButton.setOnClickListener(v -> {
+//
+//        });
+        description.setOnClickListener(v -> {
+            controller.showFullArticle(link);
         });
     }
 
     private void initDi() {
         repository = App.getInstance().getMainComponent().rssFeedRepository();
-        RssPreviewController controller = new RssPreviewController((RssPreviewRouter) getActivity());
+        controller = new RssPreviewController((RssPreviewRouter) getActivity());
     }
 
     public static Fragment getInstance(String link) {

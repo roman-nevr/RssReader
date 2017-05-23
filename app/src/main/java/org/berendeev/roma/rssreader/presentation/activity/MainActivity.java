@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import org.berendeev.roma.rssreader.R;
+import org.berendeev.roma.rssreader.presentation.fragment.FullSizeViewFragment;
 import org.berendeev.roma.rssreader.presentation.fragment.RssListFragment;
 import org.berendeev.roma.rssreader.presentation.fragment.RssPreviewFragment;
 import org.berendeev.roma.rssreader.presentation.router.Navigator;
@@ -15,6 +16,8 @@ import org.berendeev.roma.rssreader.presentation.router.Navigator.RssListRouter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.R.integer.config_shortAnimTime;
 
 public class MainActivity extends AppCompatActivity implements Navigator, RssListRouter, Navigator.RssPreviewRouter {
 
@@ -24,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements Navigator, RssLis
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
 
-//    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements Navigator, RssLis
         if (savedInstanceState == null) {
             showFirstFragment();
         }
-//        initActionBar();
+        initActionBar();
     }
 
     private void initUi() {
@@ -44,7 +47,8 @@ public class MainActivity extends AppCompatActivity implements Navigator, RssLis
     }
 
     private void initActionBar() {
-//        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+//        toolbar.animate().translationXBy(100).setDuration(getResources().getInteger(config_shortAnimTime));
     }
 
     private void showFirstFragment(){
@@ -99,7 +103,11 @@ public class MainActivity extends AppCompatActivity implements Navigator, RssLis
 
 
     @Override public void moveBack() {
-        fragmentManager.popBackStack();
+        if(fragmentManager.getBackStackEntryCount() < 1){
+            finish();
+        }else {
+            fragmentManager.popBackStack();
+        }
     }
 
     @Override public void onBackPressed() {
@@ -108,5 +116,7 @@ public class MainActivity extends AppCompatActivity implements Navigator, RssLis
 
     @Override public void showArticle(String link) {
         //todo
+        Fragment fragment = FullSizeViewFragment.getInstance(link);
+        showFragment(fragment);
     }
 }
