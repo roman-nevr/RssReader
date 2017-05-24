@@ -6,7 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import org.berendeev.roma.rssreader.R;
-import org.berendeev.roma.rssreader.presentation.fragment.FullSizeViewFragment;
+import org.berendeev.roma.rssreader.presentation.activity.WebViewActivity;
+import org.berendeev.roma.rssreader.presentation.fragment.WebViewFragment;
 import org.berendeev.roma.rssreader.presentation.fragment.RssListFragment;
 import org.berendeev.roma.rssreader.presentation.fragment.RssPreviewFragment;
 
@@ -46,8 +47,9 @@ public class TwoPaneNavigator extends Navigator {
     }
 
     @Override public void showArticle(String link) {
-        Fragment fragment = FullSizeViewFragment.getInstance(link);
-        showFragment(fragment);
+//        Fragment fragment = WebViewFragment.getInstance(link);
+//        showFragment(fragment);
+        WebViewActivity.start(activity, link);
     }
 
     private void beginTransaction(){
@@ -67,12 +69,12 @@ public class TwoPaneNavigator extends Navigator {
 
     private void addListFragment(Fragment fragment) {
         transaction.add(R.id.list_container, fragment);
-        transaction.addToBackStack(null);
+//        transaction.addToBackStack(null);
     }
 
     private void replaceFragmentWith(Fragment fragment) {
         transaction.replace(R.id.preview_container, fragment);
-        transaction.addToBackStack(null);
+//        transaction.addToBackStack(null);
     }
 
     private void setAnimation(){

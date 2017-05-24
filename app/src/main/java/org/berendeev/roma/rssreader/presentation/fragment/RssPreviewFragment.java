@@ -79,8 +79,6 @@ public class RssPreviewFragment extends Fragment {
         if (!rssItem.enclosure().isEmpty()){
             Util.loadImage(getContext(), rssItem.enclosure(), image);
         }
-//        Spanned spanned = Util.fromHtml(rssItem.description());
-//        description.setText(spanned);
         filler.fillWithImages(description, rssItem.description());
     }
 
