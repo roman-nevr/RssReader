@@ -12,13 +12,9 @@ import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.domain.RssFeedRepository;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import org.berendeev.roma.rssreader.presentation.App;
-import org.berendeev.roma.rssreader.presentation.controller.RssPreviewController;
-import org.berendeev.roma.rssreader.presentation.router.Navigator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class FullSizeViewFragment extends Fragment {

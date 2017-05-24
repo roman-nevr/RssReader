@@ -4,28 +4,20 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
-
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.Util;
+import org.berendeev.roma.rssreader.domain.HtmlImageFiller;
 import org.berendeev.roma.rssreader.domain.RssFeedRepository;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import org.berendeev.roma.rssreader.presentation.App;
 import org.berendeev.roma.rssreader.presentation.controller.RssPreviewController;
-import org.berendeev.roma.rssreader.presentation.router.Navigator;
-import org.berendeev.roma.rssreader.presentation.router.Navigator.RssPreviewRouter;
+import org.berendeev.roma.rssreader.presentation.router.BaseRouter.RssPreviewRouter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +37,7 @@ public class RssPreviewFragment extends Fragment {
 //    @BindView(R.id.show_article) Button showArticleButton;
 
     private RssFeedRepository repository;
+    private HtmlImageFiller filler;
     private String link;
     private RssPreviewController controller;
 
@@ -86,8 +79,9 @@ public class RssPreviewFragment extends Fragment {
         if (!rssItem.enclosure().isEmpty()){
             Util.loadImage(getContext(), rssItem.enclosure(), image);
         }
-        Spanned spanned = Util.fromHtml(rssItem.description());
-        description.setText(spanned);
+//        Spanned spanned = Util.fromHtml(rssItem.description());
+//        description.setText(spanned);
+        filler.fillWithImages(description, rssItem.description());
     }
 
     private void initUi(View view) {
@@ -103,6 +97,7 @@ public class RssPreviewFragment extends Fragment {
 
     private void initDi() {
         repository = App.getInstance().getMainComponent().rssFeedRepository();
+        filler = App.getInstance().getMainComponent().htmlImageFiller();
         controller = new RssPreviewController((RssPreviewRouter) getActivity());
     }
 

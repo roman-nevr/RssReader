@@ -25,7 +25,6 @@
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="TextView"
             android:textSize="20sp"
             android:maxLines="2"
             android:textStyle="bold"
@@ -37,13 +36,13 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp"
             app:layout_constraintHorizontal_bias="0.0"
+            tools:text="@string/lorem_ipsum"
             />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="TextView"
             android:textSize="16sp"
             android:maxLines="3"
             android:ellipsize="end"
@@ -56,6 +55,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/title"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
+            tools:text="@string/lorem_ipsum"
             />
     </android.support.constraint.ConstraintLayout>
 

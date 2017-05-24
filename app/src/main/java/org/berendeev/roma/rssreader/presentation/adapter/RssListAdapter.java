@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.Util;
+import org.berendeev.roma.rssreader.domain.HtmlImageFiller;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import org.berendeev.roma.rssreader.presentation.controller.RssListController;
 
@@ -27,13 +28,15 @@ import butterknife.ButterKnife;
 public class RssListAdapter extends RecyclerView.Adapter<RssListAdapter.RssViewHolder> {
 
     private final Context context;
+    private final HtmlImageFiller filler;
     private List<RssItem> rssItems;
     private RssListController controller;
 
-    public RssListAdapter(List<RssItem> rssItems, RssListController controller, Context context) {
+    public RssListAdapter(List<RssItem> rssItems, RssListController controller, Context context, HtmlImageFiller filler) {
         this.rssItems = rssItems;
         this.controller = controller;
         this.context = context;
+        this.filler = filler;
         hasStableIds();
     }
 
@@ -42,7 +45,7 @@ public class RssListAdapter extends RecyclerView.Adapter<RssListAdapter.RssViewH
     }
 
     @Override public RssViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rss_record_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rss_record_linear_item, parent, false);
         return new RssViewHolder(view);
     }
 
@@ -58,7 +61,8 @@ public class RssListAdapter extends RecyclerView.Adapter<RssListAdapter.RssViewH
         }
         holder.title.setText(item.title());
 
-        holder.description.setText(htmlToSimpleText(item.description()));
+//        holder.description.setText(htmlToSimpleText(item.description()));
+        filler.fill(holder.description, item.description());
     }
 
     private String htmlToSimpleText(String html){

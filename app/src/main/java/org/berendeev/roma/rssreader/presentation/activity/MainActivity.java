@@ -5,40 +5,58 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.widget.FrameLayout;
 
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.presentation.fragment.FullSizeViewFragment;
 import org.berendeev.roma.rssreader.presentation.fragment.RssListFragment;
 import org.berendeev.roma.rssreader.presentation.fragment.RssPreviewFragment;
+import org.berendeev.roma.rssreader.presentation.router.BaseRouter;
+import org.berendeev.roma.rssreader.presentation.router.BaseRouter.RssListRouter;
+import org.berendeev.roma.rssreader.presentation.router.BaseRouter.RssPreviewRouter;
 import org.berendeev.roma.rssreader.presentation.router.Navigator;
-import org.berendeev.roma.rssreader.presentation.router.Navigator.RssListRouter;
+import org.berendeev.roma.rssreader.presentation.router.OnePaneNavigator;
+import org.berendeev.roma.rssreader.presentation.router.TwoPaneNavigator;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.integer.config_shortAnimTime;
-
-public class MainActivity extends AppCompatActivity implements Navigator, RssListRouter, Navigator.RssPreviewRouter {
+public class MainActivity extends AppCompatActivity implements BaseRouter, RssListRouter, RssPreviewRouter {
 
     public static final String PREVIEW = "preview";
     public static final String LIST = "list";
     public static final String STACK = "stack";
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
+    private Navigator navigator;
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
+
+//    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initUi();
+        initRouter();
         fragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
             showFirstFragment();
         }
         initActionBar();
+
+    }
+
+    private void initRouter() {
+        if (isTwoPane()){
+            navigator = new TwoPaneNavigator(this);
+        }else {
+            navigator = new OnePaneNavigator(this);
+        }
+    }
+
+    private boolean isTwoPane() {
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.preview_container);
+        return frameLayout == null;
     }
 
     private void initUi() {
@@ -47,67 +65,36 @@ public class MainActivity extends AppCompatActivity implements Navigator, RssLis
     }
 
     private void initActionBar() {
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 //        toolbar.animate().translationXBy(100).setDuration(getResources().getInteger(config_shortAnimTime));
     }
 
     private void showFirstFragment(){
-        beginTransaction();
-        addFragment(new RssListFragment());
-        commitTransaction();
+        navigator.showRssList();
 
-    }
-
-    private void beginTransaction(){
-        transaction = fragmentManager.beginTransaction();
-    }
-
-    private void commitTransaction(){
-        transaction.commit();
-    }
-
-    private void showFragment(Fragment fragment){
-        beginTransaction();
-        setAnimation();
-        replaceFragmentWith(fragment);
-        commitTransaction();
-    }
-
-    private void addFragment(Fragment fragment) {
-        transaction.add(R.id.container, fragment);
-        transaction.addToBackStack(null);
-    }
-
-    private void replaceFragmentWith(Fragment fragment) {
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(null);
-    }
-
-    private void setAnimation(){
-        int enter = R.anim.to_right_in;
-        int exit = R.anim.to_left_out;
-        int popEnter = R.anim.to_left_in;
-        int popExit = R.anim.to_right_out;
-
-        transaction.setCustomAnimations(enter, exit, popEnter, popExit);
     }
 
     @Override public void moveToPreview(String link) {
-        Fragment fragment = RssPreviewFragment.getInstance(link);
-        showFragment(fragment);
+        navigator.moveToPreview(link);
     }
 
     @Override public void showSettings() {
         //todo
+        navigator.showSettings();
+    }
+
+    @Override public void showRssList() {
+        navigator.showRssList();
     }
 
 
     @Override public void moveBack() {
-        if(fragmentManager.getBackStackEntryCount() < 1){
-            finish();
-        }else {
-            fragmentManager.popBackStack();
-        }
+//        if(fragmentManager.getBackStackEntryCount() < 1){
+//            finish();
+//        }else {
+//            fragmentManager.popBackStack();
+//        }
+        navigator.moveBack();
     }
 
     @Override public void onBackPressed() {
@@ -115,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements Navigator, RssLis
     }
 
     @Override public void showArticle(String link) {
-        //todo
-        Fragment fragment = FullSizeViewFragment.getInstance(link);
-        showFragment(fragment);
+//        Fragment fragment = FullSizeViewFragment.getInstance(link);
+//        showFragment(fragment);
+        showArticle(link);
     }
 }

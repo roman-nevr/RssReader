@@ -9,21 +9,17 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import org.berendeev.roma.rssreader.R;
+import org.berendeev.roma.rssreader.domain.HtmlImageFiller;
 import org.berendeev.roma.rssreader.domain.RssFeedRepository;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import org.berendeev.roma.rssreader.presentation.App;
 import org.berendeev.roma.rssreader.presentation.adapter.RssListAdapter;
 import org.berendeev.roma.rssreader.presentation.controller.RssListController;
-import org.berendeev.roma.rssreader.presentation.router.Navigator;
-import org.berendeev.roma.rssreader.presentation.router.Navigator.RssListRouter;
+import org.berendeev.roma.rssreader.presentation.router.BaseRouter.RssListRouter;
 
 import java.util.List;
 
@@ -44,6 +40,7 @@ public class RssListFragment extends Fragment{
     private RssFeedRepository repository;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private RssListController controller;
+    private HtmlImageFiller filler;
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
@@ -100,7 +97,7 @@ public class RssListFragment extends Fragment{
 
     private void setRssFeed(List<RssItem> rssItems) {
         if (adapter == null){
-            adapter = new RssListAdapter(rssItems, controller, getActivity().getApplicationContext());
+            adapter = new RssListAdapter(rssItems, controller, getActivity().getApplicationContext(), filler);
             recyclerView.setAdapter(adapter);
         }else {
             adapter.update(rssItems);
@@ -130,7 +127,8 @@ public class RssListFragment extends Fragment{
 
     private void initDi() {
         repository = App.getInstance().getMainComponent().rssFeedRepository();
-        //activity is instance of Navigator, we checked it in onAttach()
+        filler = App.getInstance().getMainComponent().htmlImageFiller();
+        //activity is instance of BaseRouter, we checked it in onAttach()
         controller = new RssListController((RssListRouter) getActivity());
     }
 }

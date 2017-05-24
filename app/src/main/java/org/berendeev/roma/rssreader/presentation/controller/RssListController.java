@@ -1,6 +1,6 @@
 package org.berendeev.roma.rssreader.presentation.controller;
 
-import org.berendeev.roma.rssreader.presentation.router.Navigator.RssListRouter;
+import org.berendeev.roma.rssreader.presentation.router.BaseRouter.RssListRouter;
 
 public class RssListController {
 

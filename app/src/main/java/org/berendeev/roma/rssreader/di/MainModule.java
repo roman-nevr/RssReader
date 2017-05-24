@@ -2,15 +2,18 @@ package org.berendeev.roma.rssreader.di;
 
 import android.content.Context;
 
+import org.berendeev.roma.rssreader.data.HtmlImageFillerImpl;
 import org.berendeev.roma.rssreader.data.RssFeedRepositoryImpl;
 import org.berendeev.roma.rssreader.data.XmlTimeParserImpl;
 import org.berendeev.roma.rssreader.data.http.RssFeedHttpDataSource;
 import org.berendeev.roma.rssreader.data.preferences.PreferencesDataSources;
 import org.berendeev.roma.rssreader.data.sqlite.DatabaseOpenHelper;
 import org.berendeev.roma.rssreader.data.sqlite.RssFeedSqlDataSource;
+import org.berendeev.roma.rssreader.domain.HtmlImageFiller;
 import org.berendeev.roma.rssreader.domain.RssFeedRepository;
 import org.berendeev.roma.rssreader.domain.XmlTimeParser;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -64,5 +67,11 @@ public class MainModule {
     @Provides
     public RssFeedRepository provideRssFeedRepository(PreferencesDataSources preferencesDataSources, RssFeedSqlDataSource sqlDataSource, RssFeedHttpDataSource httpDataSource){
         return new RssFeedRepositoryImpl(preferencesDataSources, sqlDataSource, httpDataSource);
+    }
+
+    @Singleton
+    @Provides
+    public HtmlImageFiller provideHtmlImageFiller(Context context){
+        return new HtmlImageFillerImpl(context);
     }
 }

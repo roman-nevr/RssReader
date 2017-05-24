@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 import timber.log.Timber;
 
@@ -33,7 +35,8 @@ public class RssFeedSqlDataSource {
     public List<RssItem> getAllRssItems(){
         List<RssItem> rssItems = new ArrayList<>();
 
-        Cursor cursor = database.query(FEEDS_TABLE, null, null, null, null, null, null);
+        String orderBy = "rowid DESC";
+        Cursor cursor = database.query(FEEDS_TABLE, null, null, null, null, null, orderBy);
 
         while (cursor.moveToNext()){
             rssItems.add(getRssItemFromCursor(cursor));
@@ -48,9 +51,14 @@ public class RssFeedSqlDataSource {
     }
 
     public void saveAllRssItems(List<RssItem> rssItems){
-        for (RssItem rssItem : rssItems) {
+//        Collections.reverse(rssItems);
+        List<RssItem> reverse = new ArrayList<>(rssItems);
+        Collections.reverse(reverse);
+
+        for (RssItem rssItem : reverse) {
             saveRssItem(rssItem);
         }
+
     }
 
     public RssItem getRssItem(String link){

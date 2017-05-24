@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseOpenHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "rss.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     //ID | CARD | DATE
     public static final String FEEDS_TABLE = "feeds";
