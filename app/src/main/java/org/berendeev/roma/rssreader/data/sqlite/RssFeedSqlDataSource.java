@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.berendeev.roma.rssreader.BuildConfig;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 
 import java.util.ArrayList;
@@ -74,6 +75,13 @@ public class RssFeedSqlDataSource {
         }
         cursor.close();
         return rssItem;
+    }
+
+    public void removeAll(){
+        int a = database.delete(FEEDS_TABLE, "1", null);
+        if (BuildConfig.DEBUG){
+            System.out.println(a);
+        }
     }
 
     private void fillContentValues(RssItem rssItem){

@@ -7,8 +7,9 @@
 
     <FrameLayout
         android:id="@+id/list_container"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/list_pane_width"
         android:layout_height="match_parent"/>
+
     <FrameLayout
         android:id="@+id/preview_container"
         android:layout_width="match_parent"

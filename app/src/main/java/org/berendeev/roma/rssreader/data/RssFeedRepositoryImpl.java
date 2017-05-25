@@ -45,7 +45,9 @@ public class RssFeedRepositoryImpl implements RssFeedRepository {
     @Override public Completable setNewFeed(URL url) {
         return Completable.fromAction(() -> {
             if (httpDataSource.isRssAvailable(url)){
-                preferencesDataSources.saveLink(url.getPath());
+                preferencesDataSources.saveLink(url.toString());
+                sqlDataSource.removeAll();
+                updateFeedInner();
             }else {
                 throw new IllegalArgumentException("rss not found");
             }
@@ -54,11 +56,15 @@ public class RssFeedRepositoryImpl implements RssFeedRepository {
 
     @Override public Completable updateFeed() {
         return Completable.fromAction(() -> {
-            List<RssItem> rssItems = httpDataSource.getFeed(url);
-            sqlDataSource.saveAllRssItems(rssItems);
-            rssItems = sqlDataSource.getAllRssItems();
-            rssSubject.onNext(rssItems);
+            updateFeedInner();
         });
+    }
+
+    private void updateFeedInner(){
+        List<RssItem> rssItems = httpDataSource.getFeed(url);
+        sqlDataSource.saveAllRssItems(rssItems);
+        rssItems = sqlDataSource.getAllRssItems();
+        rssSubject.onNext(rssItems);
     }
 
     @Override public Single<RssItem> getRssItem(String link) {

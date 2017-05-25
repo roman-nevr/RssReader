@@ -16,14 +16,16 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements BaseRouter, RssListRouter, RssPreviewRouter {
 
+    public static final String OPEN_LINK = "open_link";
     private Navigator navigator;
+    private String openLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUi();
         initRouter();
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null){
             showFirstFragment();
         }
     }
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements BaseRouter, RssLi
         moveBack();
     }
 
-    @Override public void showArticle(String link) {
-        navigator.showArticle(link);
+    @Override public void showWebArticle(String link) {
+        navigator.showWebArticle(link);
     }
 }

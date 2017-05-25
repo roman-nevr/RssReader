@@ -14,7 +14,7 @@ public interface BaseRouter {
     }
 
     interface RssPreviewRouter extends BaseRouter {
-        void showArticle(String link);
+        void showWebArticle(String link);
     }
 
 }

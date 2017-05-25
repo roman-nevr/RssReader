@@ -2,6 +2,7 @@ package org.berendeev.roma.rssreader.presentation.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -57,6 +58,11 @@ public class WebViewActivity extends AppCompatActivity implements BaseRouter{
         intent.putExtra(LINK, link);
         context.startActivity(intent);
     }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+    }
+
 
     @Override public void moveBack() {
         finish();

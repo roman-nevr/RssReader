@@ -1,5 +1,6 @@
 package org.berendeev.roma.rssreader.presentation.router;
 
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -7,9 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.presentation.activity.WebViewActivity;
-import org.berendeev.roma.rssreader.presentation.fragment.WebViewFragment;
-import org.berendeev.roma.rssreader.presentation.fragment.RssListFragment;
 import org.berendeev.roma.rssreader.presentation.fragment.RssPreviewFragment;
+import org.berendeev.roma.rssreader.presentation.fragment.SettingsFragment;
 
 public class TwoPaneNavigator extends Navigator {
 
@@ -24,56 +24,61 @@ public class TwoPaneNavigator extends Navigator {
 
     @Override public void moveToPreview(String link) {
         Fragment fragment = RssPreviewFragment.getInstance(link);
-        showFragment(fragment);
+        showFragment(fragment, PREVIEW, R.id.preview_container);
     }
 
     @Override public void showSettings() {
         //todo
-    }
-
-    @Override public void showRssList() {
+        Fragment fragment = new SettingsFragment();
+//        showFragment(fragment, SETTINGS, R.id.preview_container);
         beginTransaction();
-        addListFragment(new RssListFragment());
+        setAnimation();
+        replaceFragmentWith(fragment, SETTINGS, R.id.preview_container);
+        transaction.addToBackStack(null);
         commitTransaction();
     }
 
+    @Override public void showRssList() {
+        Fragment fragment = getFragmentByTag(RSS_LIST, null);
+        showFragment(fragment, RSS_LIST, R.id.list_container);
+    }
+
+
 
     @Override public void moveBack() {
-        if(fragmentManager.getBackStackEntryCount() < 1){
+        if (fragmentManager.getBackStackEntryCount() < 1){
             activity.finish();
         }else {
             fragmentManager.popBackStack();
         }
     }
 
-    @Override public void showArticle(String link) {
-//        Fragment fragment = WebViewFragment.getInstance(link);
-//        showFragment(fragment);
+    @Override public void showWebArticle(String link) {
         WebViewActivity.start(activity, link);
     }
 
-    private void beginTransaction(){
+    protected void beginTransaction(){
         transaction = fragmentManager.beginTransaction();
     }
 
-    private void commitTransaction(){
+    protected void commitTransaction(){
         transaction.commit();
     }
 
-    private void showFragment(Fragment fragment){
+    private void showFragment(Fragment fragment, String tag, @IdRes int containerId){
         beginTransaction();
         setAnimation();
-        replaceFragmentWith(fragment);
+        replaceFragmentWith(fragment, tag, containerId);
         commitTransaction();
     }
 
-    private void addListFragment(Fragment fragment) {
-        transaction.add(R.id.list_container, fragment);
+    protected void addFragment(Fragment fragment, String tag, @IdRes int containerId) {
+        transaction.replace(containerId, fragment, tag);
 //        transaction.addToBackStack(null);
     }
 
-    private void replaceFragmentWith(Fragment fragment) {
-        transaction.replace(R.id.preview_container, fragment);
+    private void replaceFragmentWith(Fragment fragment, String tag, @IdRes int containerId) {
+        transaction.replace(containerId, fragment, tag);
 //        transaction.addToBackStack(null);
     }
 
@@ -84,5 +89,9 @@ public class TwoPaneNavigator extends Navigator {
         int popExit = R.anim.to_right_out;
 
 //        transaction.setCustomAnimations(enter, exit, popEnter, popExit);
+    }
+
+    @Override protected FragmentManager getFragmentManager() {
+        return fragmentManager;
     }
 }

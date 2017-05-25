@@ -15,6 +15,6 @@ public class RssPreviewController {
     }
 
     public void showFullArticle(String link){
-        router.showArticle(link);
+        router.showWebArticle(link);
     }
 }

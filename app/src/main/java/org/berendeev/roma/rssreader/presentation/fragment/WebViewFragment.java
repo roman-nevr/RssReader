@@ -1,6 +1,7 @@
 package org.berendeev.roma.rssreader.presentation.fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,6 @@ import android.webkit.WebView;
 
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.domain.RssFeedRepository;
-import org.berendeev.roma.rssreader.domain.entity.RssItem;
 import org.berendeev.roma.rssreader.presentation.App;
 import org.berendeev.roma.rssreader.presentation.router.BaseRouter;
 
@@ -52,7 +52,7 @@ public class WebViewFragment extends Fragment {
 //        backButton.setOnClickListener(v -> {
 //
 //        });
-        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptEnabled(false);
         // указываем страницу загрузки
         webView.loadUrl(link);
     }
