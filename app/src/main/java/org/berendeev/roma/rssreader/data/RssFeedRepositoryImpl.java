@@ -45,6 +45,7 @@ public class RssFeedRepositoryImpl implements RssFeedRepository {
     @Override public Completable setNewFeed(URL url) {
         return Completable.fromAction(() -> {
             if (httpDataSource.isRssAvailable(url)){
+                RssFeedRepositoryImpl.this.url = url;
                 preferencesDataSources.saveLink(url.toString());
                 sqlDataSource.removeAll();
                 updateFeedInner();

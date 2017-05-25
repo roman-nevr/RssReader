@@ -11,4 +11,7 @@
     <string name="cancel">cancel</string>
     <string name="feed_error">Invalid URL, please check</string>
     <string name="new_feed_set">New RSS feed set</string>
+
+    <string name="lenta_url"><u>https://lenta.ru/rss/news</u></string>
+    <string name="pcworld_url"><u>http://feeds.pcworld.com/pcworld/latestnews</u></string>
 </resources>

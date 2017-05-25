@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
     <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        />
+
+    <FrameLayout
         android:id="@+id/list_container"
         android:layout_width="@dimen/list_pane_width"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        />
+
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/divider_color"
+        android:layout_toRightOf="@id/list_container"
+        />
 
     <FrameLayout
         android:id="@+id/preview_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+
+        android:layout_toEndOf="@+id/divider"
+        android:layout_alignParentEnd="true"
+        />
+</RelativeLayout>

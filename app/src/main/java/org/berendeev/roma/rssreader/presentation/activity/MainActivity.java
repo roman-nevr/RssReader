@@ -16,9 +16,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements BaseRouter, RssListRouter, RssPreviewRouter {
 
-    public static final String OPEN_LINK = "open_link";
     private Navigator navigator;
-    private String openLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

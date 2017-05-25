@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageButton;
 
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.domain.RssFeedRepository;
@@ -23,20 +24,21 @@ public class WebViewFragment extends Fragment {
 
     private static final String LINK = "link";
     private String link;
-    private RssFeedRepository repository;
 
     @BindView(R.id.web_view) WebView webView;
+    @BindView(R.id.back_button) ImageButton backButton;
+    private BaseRouter navigator;
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         if (!(getActivity() instanceof BaseRouter)){
             throw new IllegalArgumentException("activity must implement RssPreviewRouter");
         }
+        navigator = (BaseRouter) getActivity();
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.rss_web, container, false);
-//        initDi();
         initData();
         initUi(view);
         return view;
@@ -48,19 +50,12 @@ public class WebViewFragment extends Fragment {
 
     private void initUi(View view) {
         ButterKnife.bind(this, view);
-        //// TODO: 21.05.17 Back arrow
-//        backButton.setOnClickListener(v -> {
-//
-//        });
         webView.getSettings().setJavaScriptEnabled(false);
-        // указываем страницу загрузки
         webView.loadUrl(link);
+        backButton.setOnClickListener(v -> {
+            navigator.moveBack();
+        });
     }
-
-    private void initDi() {
-        repository = App.getInstance().getMainComponent().rssFeedRepository();
-    }
-
 
     public static Fragment getInstance(String link) {
         Fragment fragment = new WebViewFragment();
