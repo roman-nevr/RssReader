@@ -1,5 +1,10 @@
 package org.berendeev.roma.rssreader.presentation.router;
 
+import android.app.Instrumentation;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +15,8 @@ import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.presentation.activity.WebViewActivity;
 import org.berendeev.roma.rssreader.presentation.fragment.RssPreviewFragment;
 import org.berendeev.roma.rssreader.presentation.fragment.SettingsFragment;
+
+import java.util.List;
 
 public class TwoPaneNavigator extends Navigator {
 
@@ -28,11 +35,8 @@ public class TwoPaneNavigator extends Navigator {
     }
 
     @Override public void showSettings() {
-        //todo
         Fragment fragment = new SettingsFragment();
-//        showFragment(fragment, SETTINGS, R.id.preview_container);
         beginTransaction();
-        setAnimation();
         replaceFragmentWith(fragment, SETTINGS, R.id.preview_container);
         transaction.addToBackStack(null);
         commitTransaction();
@@ -46,10 +50,11 @@ public class TwoPaneNavigator extends Navigator {
 
 
     @Override public void moveBack() {
-        if (fragmentManager.getBackStackEntryCount() < 1){
-            activity.finish();
-        }else {
+        Fragment fragment = fragmentManager.findFragmentByTag(SETTINGS);
+        if (fragment != null &&  fragment.isAdded()){
             fragmentManager.popBackStack();
+        }else {
+            activity.finish();
         }
     }
 
@@ -67,28 +72,12 @@ public class TwoPaneNavigator extends Navigator {
 
     private void showFragment(Fragment fragment, String tag, @IdRes int containerId){
         beginTransaction();
-        setAnimation();
         replaceFragmentWith(fragment, tag, containerId);
         commitTransaction();
     }
 
-    protected void addFragment(Fragment fragment, String tag, @IdRes int containerId) {
-        transaction.replace(containerId, fragment, tag);
-//        transaction.addToBackStack(null);
-    }
-
     private void replaceFragmentWith(Fragment fragment, String tag, @IdRes int containerId) {
         transaction.replace(containerId, fragment, tag);
-//        transaction.addToBackStack(null);
-    }
-
-    private void setAnimation(){
-        int enter = R.anim.to_right_in;
-        int exit = R.anim.to_left_out;
-        int popEnter = R.anim.to_left_in;
-        int popExit = R.anim.to_right_out;
-
-//        transaction.setCustomAnimations(enter, exit, popEnter, popExit);
     }
 
     @Override protected FragmentManager getFragmentManager() {

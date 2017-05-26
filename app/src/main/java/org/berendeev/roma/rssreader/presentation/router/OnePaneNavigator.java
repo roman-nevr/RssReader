@@ -54,8 +54,6 @@ public class OnePaneNavigator extends Navigator {
     }
 
     @Override public void showWebArticle(String link) {
-//        Fragment fragment = getFragmentByTag(WEB_VIEW, link);
-//        showFragment(fragment, WEB_VIEW, R.id.container);
         WebViewActivity.start(activity, link);
     }
 
@@ -76,7 +74,6 @@ public class OnePaneNavigator extends Navigator {
 
     protected void addFragment(Fragment fragment, String tag, @IdRes int containerId) {
         transaction.replace(containerId, fragment, tag);
-//        transaction.addToBackStack(null);
     }
 
     private void replaceFragmentWith(Fragment fragment, String tag, @IdRes int containerId) {

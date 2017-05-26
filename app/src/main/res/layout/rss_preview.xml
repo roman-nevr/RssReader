@@ -30,6 +30,9 @@
             android:gravity="center"
             android:background="?attr/selectableItemBackground"
             android:text="@string/show_article"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            tools:text="Web-Version"
             />
         <ImageButton
             android:id="@+id/back_button"

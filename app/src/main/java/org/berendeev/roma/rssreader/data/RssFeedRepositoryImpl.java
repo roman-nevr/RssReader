@@ -7,14 +7,13 @@ import org.berendeev.roma.rssreader.domain.RssFeedRepository;
 import org.berendeev.roma.rssreader.domain.entity.RssItem;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 
@@ -34,6 +33,12 @@ public class RssFeedRepositoryImpl implements RssFeedRepository {
 
         rssSubject = BehaviorSubject.createDefault(sqlDataSource.getAllRssItems());
         url = getFeedUrl().blockingGet();
+        if (sqlDataSource.isEmpty()){
+            updateFeed()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
+        }
     }
 
     @Override public Single<URL> getFeedUrl() {
@@ -46,7 +51,8 @@ public class RssFeedRepositoryImpl implements RssFeedRepository {
         return Completable.fromAction(() -> {
             if (httpDataSource.isRssAvailable(url)){
                 RssFeedRepositoryImpl.this.url = url;
-                preferencesDataSources.saveLink(url.toString());
+                String name = httpDataSource.getFeedName(url);
+                preferencesDataSources.saveNewFeed(url.toString(), name);
                 sqlDataSource.removeAll();
                 updateFeedInner();
             }else {
@@ -81,6 +87,14 @@ public class RssFeedRepositoryImpl implements RssFeedRepository {
 
     @Override public Completable clearOldFromDate(long date) {
         return null;
+    }
+
+    @Override public String getChannelName() {
+//        return Single.fromCallable(() -> {
+//            String name = preferencesDataSources.getName();
+//            return name;
+//        });
+        return preferencesDataSources.getName();
     }
 
 

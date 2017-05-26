@@ -6,23 +6,29 @@ import android.content.SharedPreferences;
 public class PreferencesDataSources {
     public static final String RSS_LINK = "rssLink";
     public static final String LINK = "link";
+    public static final String NAME = "name";
     private Context context;
-    private SharedPreferences rssLinkPreferences;
+    private SharedPreferences rssPreferences;
 
     public PreferencesDataSources(Context context) {
         this.context = context;
-        rssLinkPreferences = context.getSharedPreferences(RSS_LINK, Context.MODE_PRIVATE);
+        rssPreferences = context.getSharedPreferences(RSS_LINK, Context.MODE_PRIVATE);
     }
 
-    public void saveLink(String link){
-        rssLinkPreferences.edit()
+    public void saveNewFeed(String link, String name){
+        rssPreferences.edit()
                 .putString(LINK, link)
+                .putString(NAME, name)
                 .apply();
     }
 
     public String getLink(){
-//        saveLink("http://feeds.pcworld.com/pcworld/latestnews");
+//        saveNewFeed("http://feeds.pcworld.com/pcworld/latestnews");
 //        return "http://feeds.pcworld.com/pcworld/latestnews";
-        return rssLinkPreferences.getString(LINK, "http://feeds.pcworld.com/pcworld/latestnews");
+        return rssPreferences.getString(LINK, "http://feeds.pcworld.com/pcworld/latestnews");
+    }
+
+    public String getName(){
+        return rssPreferences.getString(NAME, "PCWorld");
     }
 }

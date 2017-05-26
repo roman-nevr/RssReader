@@ -22,4 +22,6 @@ public interface RssFeedRepository {
     Observable<List<RssItem>> getFeedObservable();
 
     Completable clearOldFromDate(long date);
+
+    String getChannelName();
 }

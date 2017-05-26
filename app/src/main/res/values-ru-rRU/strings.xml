@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RSS Читатель</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="show_article">Web-версия</string>
+
+    <string name="save_feed">Сохранить</string>
+    <string name="rss_feed_hint">Введите новый адрес RSS ленты</string>
+
+    <string name="cancel">Отмена</string>
+    <string name="feed_error">Ошибка в URL, пожалуйста, проверьте ошибки</string>
+    <string name="no_rss_error">RSS ленты по этому адресу нет</string>
+    <string name="new_feed_set">Установлен новый адрес RSS ленты</string>
+
+    <string name="lenta_url"><u>https://lenta.ru/rss/news</u></string>
+    <string name="pcworld_url"><u>http://feeds.pcworld.com/pcworld/latestnews</u></string>
+</resources>

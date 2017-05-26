@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.domain.HtmlImageFiller;
@@ -36,6 +37,7 @@ public class RssListFragment extends Fragment{
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.refresh_container) SwipeRefreshLayout refreshLayout;
     @BindView(R.id.settings) ImageButton rss_settings;
+    @BindView(R.id.title) TextView title;
 
     private RssListAdapter adapter;
     private RssFeedRepository repository;
@@ -60,7 +62,6 @@ public class RssListFragment extends Fragment{
     @Override public void onStart() {
         super.onStart();
         subscribeOnRssFeed();
-//        updateFeed();
     }
 
     @Override public void onStop() {
@@ -84,6 +85,7 @@ public class RssListFragment extends Fragment{
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(rssItems -> {
                     setRssFeed(rssItems);
+                    title.setText(repository.getChannelName());
                 }));
     }
 

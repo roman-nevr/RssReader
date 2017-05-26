@@ -4,14 +4,17 @@
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
 
     <string name="settings_title">Settings</string>
-    <string name="show_article">web</string>
+    <string name="show_article">Web</string>
 
     <string name="save_feed">save new feed</string>
+    <string name="rss_feed_hint">Input RSS feed here</string>
 
     <string name="cancel">cancel</string>
     <string name="feed_error">Invalid URL, please check</string>
+    <string name="no_rss_error">RSS feed not found</string>
     <string name="new_feed_set">New RSS feed set</string>
 
     <string name="lenta_url"><u>https://lenta.ru/rss/news</u></string>
     <string name="pcworld_url"><u>http://feeds.pcworld.com/pcworld/latestnews</u></string>
+
 </resources>

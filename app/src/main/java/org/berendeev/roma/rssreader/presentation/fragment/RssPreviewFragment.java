@@ -25,9 +25,12 @@ import org.berendeev.roma.rssreader.presentation.router.BaseRouter.RssPreviewRou
 
 import java.text.DateFormat;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static org.berendeev.roma.rssreader.domain.entity.RssItem.EMPTY;
@@ -45,19 +48,18 @@ public class RssPreviewFragment extends Fragment {
 
     @BindView(R.id.back_button) ImageButton backButton;
 
-    private RssFeedRepository repository;
-    private HtmlImageFiller filler;
+    @Inject RssFeedRepository repository;
+    @Inject HtmlImageFiller filler;
     private String link;
-    private RssPreviewController controller;
+    @Inject RssPreviewController controller;
     private RssItem rssItem = EMPTY;
-    private RssPreviewRouter navigator;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         if (!(getActivity() instanceof RssPreviewRouter)){
             throw new IllegalArgumentException("activity must implement RssPreviewRouter");
         }
-        navigator = (RssPreviewRouter) getActivity();
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,24 +70,36 @@ public class RssPreviewFragment extends Fragment {
         return view;
     }
 
+    @Override public void onStop() {
+        super.onStop();
+        compositeDisposable.dispose();
+    }
+
     private void initData() {
         if (rssItem == EMPTY){
-            link = getArguments().getString(LINK);
-            repository.getRssItem(link)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe((rssItem, throwable) -> {
-                        if(rssItem != EMPTY){
-                            this.rssItem = rssItem;
-                            fillViews(rssItem);
-                        }else {
-                            showError(throwable);
-                        }
-                    });
+            readLink();
+            subscribeOnNewData();
         }else {
             fillViews(rssItem);
         }
+    }
 
+    private void readLink(){
+        link = getArguments().getString(LINK);
+    }
+
+    private void subscribeOnNewData(){
+        compositeDisposable.add(repository.getRssItem(link)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((rssItem, throwable) -> {
+                    if(rssItem != EMPTY){
+                        this.rssItem = rssItem;
+                        fillViews(rssItem);
+                    }else {
+                        showError(throwable);
+                    }
+                }));
     }
 
     private void showError(Throwable throwable) {
@@ -95,7 +109,6 @@ public class RssPreviewFragment extends Fragment {
     private void fillViews(RssItem rssItem) {
         title.setText(rssItem.title());
         author.setText(rssItem.author());
-        //todo regianal settings
         date.setText(formatDate(rssItem.pubDate()));
         if (!rssItem.enclosure().isEmpty()){
             Util.loadImage(getContext(), rssItem.enclosure(), image);
@@ -104,15 +117,15 @@ public class RssPreviewFragment extends Fragment {
     }
 
     private String formatDate(long date) {
-        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext().getApplicationContext());
-        return  dateFormat.format(date);
+        DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(getContext()
+                .getApplicationContext());
+        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(getContext()
+                .getApplicationContext());
+        return   timeFormat.format(date) + ", " + dateFormat.format(date);
     }
 
     private void initUi(View view) {
         ButterKnife.bind(this, view);
-//        description.setOnClickListener(v -> {
-//            controller.showFullArticle(link);
-//        });
         description.setMovementMethod(LinkMovementMethod.getInstance());
         showArticle.setOnClickListener(v -> {
             controller.showFullArticle(link);
@@ -120,12 +133,14 @@ public class RssPreviewFragment extends Fragment {
         backButton.setOnClickListener(v -> {
             controller.onBack();
         });
+        title.setOnClickListener(v -> {
+            controller.showFullArticle(link);
+        });
     }
 
     private void initDi() {
-        repository = App.getInstance().getMainComponent().rssFeedRepository();
-        filler = App.getInstance().getMainComponent().htmlImageFiller();
-        controller = new RssPreviewController((RssPreviewRouter) getActivity());
+        App.getInstance().getMainComponent().inject(this);
+        controller.setRouter((RssPreviewRouter) getActivity());
     }
 
     public static Fragment getInstance(String link) {

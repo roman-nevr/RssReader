@@ -1,5 +1,6 @@
 package org.berendeev.roma.rssreader.presentation.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -57,6 +58,9 @@ public class WebViewActivity extends AppCompatActivity implements BaseRouter{
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra(LINK, link);
         context.startActivity(intent);
+        if (context instanceof Activity){
+            ((Activity) context).overridePendingTransition(R.anim.slide_up_in, R.anim.stop);
+        }
     }
     @Override
     public void onConfigurationChanged(Configuration newConfig){
@@ -66,5 +70,11 @@ public class WebViewActivity extends AppCompatActivity implements BaseRouter{
 
     @Override public void moveBack() {
         finish();
+        overridePendingTransition(R.anim.stop, R.anim.slide_down_out);
+    }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+        moveBack();
     }
 }

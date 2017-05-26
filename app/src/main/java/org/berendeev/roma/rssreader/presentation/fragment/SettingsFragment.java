@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,15 +19,19 @@ import org.berendeev.roma.rssreader.BuildConfig;
 import org.berendeev.roma.rssreader.R;
 import org.berendeev.roma.rssreader.domain.RssFeedRepository;
 import org.berendeev.roma.rssreader.presentation.App;
+import org.berendeev.roma.rssreader.presentation.controller.SettingsController;
 import org.berendeev.roma.rssreader.presentation.router.BaseRouter;
 import org.berendeev.roma.rssreader.presentation.router.Navigator;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.VISIBLE;
@@ -40,29 +45,36 @@ public class SettingsFragment extends Fragment {
     @BindView(R.id.feed_url) EditText feedUrl;
     @BindView(R.id.pcworld_url) TextView pcworld;
     @BindView(R.id.lenta_url) TextView lenta;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
 
-    private RssFeedRepository repository;
-    private BaseRouter navigator;
+    @Inject RssFeedRepository repository;
+    @Inject SettingsController controller;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         if (!(getActivity() instanceof BaseRouter)){
             throw new IllegalArgumentException("activity must implement RssPreviewRouter");
         }
-        navigator = (BaseRouter) getActivity();
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.rss_settings, container, false);
         initDi();
-//        initData();
         initUi(view);
         return view;
     }
 
+    @Override public void onStop() {
+        super.onStop();
+        compositeDisposable.dispose();
+        controller.stop();
+    }
+
     private void initDi() {
-        repository = App.getInstance().getMainComponent().rssFeedRepository();
-//        controller = new RssPreviewController((BaseRouter.RssPreviewRouter) getActivity());
+        App.getInstance().getMainComponent().inject(this);
+        controller.setNavigator((BaseRouter) getActivity());
+        controller.setView(this);
     }
 
     private void initUi(View view) {
@@ -77,36 +89,19 @@ public class SettingsFragment extends Fragment {
 
     private void initBackButton() {
         backButton.setOnClickListener(v -> {
-            navigator.moveBack();
+            controller.back();
         });
     }
 
     private void initSaveButton() {
         saveButton.setOnClickListener(v -> {
-            try {
-                URL url = new URL(feedUrl.getText().toString());
-                repository
-                        .setNewFeed(url)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> {
-                            Toast.makeText(getContext(), R.string.new_feed_set, Toast.LENGTH_LONG).show();
-                            navigator.moveBack();
-                        }, throwable -> {
-                            showError();
-                        });
-            } catch (MalformedURLException e) {
-                if (BuildConfig.DEBUG){
-                    e.printStackTrace();
-                }
-                showError();
-            }
+            controller.setNewUrl(feedUrl.getText().toString());
         });
     }
 
     private void initCancelButton() {
         cancelButton.setOnClickListener(v -> {
-            navigator.moveBack();
+            controller.back();
         });
     }
 
@@ -133,7 +128,25 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    private void showError() {
+    public void showUrlError() {
         feedUrl.setError(getResources().getString(R.string.feed_error));
+    }
+
+    public void showNoRssError(){
+        feedUrl.setError(getResources().getString(R.string.no_rss_error));
+    }
+
+    public void showSuccess(){
+        Toast.makeText(getContext(), R.string.new_feed_set, Toast.LENGTH_LONG).show();
+    }
+
+    public void showProgress(){
+        progressBar.setVisibility(VISIBLE);
+        saveButton.setEnabled(false);
+    }
+
+    public void hideProgress(){
+        progressBar.setVisibility(View.GONE);
+        saveButton.setEnabled(true);
     }
 }

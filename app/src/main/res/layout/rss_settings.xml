@@ -45,7 +45,8 @@
             />
     </android.support.constraint.ConstraintLayout>
 
-    <include layout="@layout/settings"/>
+    <include layout="@layout/settings"
+        />
 
 
 

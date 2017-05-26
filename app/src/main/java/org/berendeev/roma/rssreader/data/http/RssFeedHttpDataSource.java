@@ -141,4 +141,28 @@ public class RssFeedHttpDataSource {
         String name = xpp.getName();
         return name;
     }
+
+    public String getFeedName(URL url) {
+        try {
+            XmlPullParser xpp = getPullParser(url);
+            String name = "";
+            while (!isDocumentEnd(xpp) && name.equals("")){
+                xpp.next();
+                if ("channel".equalsIgnoreCase(getStartTagName(xpp))){
+                    xpp.nextTag();
+                    while (!"title".equalsIgnoreCase(xpp.getName())){
+                        xpp.next();
+                    }
+                    xpp.next();
+                    name = xpp.getText();
+                }
+            }
+            return name;
+        }catch (XmlPullParserException | IOException e){
+            if (android.support.v7.appcompat.BuildConfig.DEBUG){
+                e.printStackTrace();
+            }
+            return "";
+        }
+    }
 }

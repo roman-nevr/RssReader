@@ -4,16 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
         android:id="@+id/textInputLayout">
         <EditText
             android:id="@+id/feed_url"
@@ -22,7 +24,7 @@
             android:ems="10"
             android:inputType="textUri"
             android:imeOptions="actionDone"
-            android:hint="Input RSS feed here"
+            android:hint="@string/rss_feed_hint"
             tools:text = "@string/lorem_ipsum"
             />
     </android.support.design.widget.TextInputLayout>
@@ -30,13 +32,13 @@
     <Button
         android:id="@+id/cancel"
         android:textSize="@dimen/title_text_size"
-        android:text="cancel"
+        android:text="@string/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        android:layout_marginRight="24dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:background="?attr/selectableItemBackground"
         app:layout_constraintRight_toLeftOf="@+id/save_button"
@@ -51,10 +53,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        android:layout_marginRight="24dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         android:background="?attr/selectableItemBackground"
         />
@@ -89,6 +91,21 @@
         android:layout_marginTop="32dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/pcworld_url"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:visibility="gone"
         tools:visibility="visible"
         />

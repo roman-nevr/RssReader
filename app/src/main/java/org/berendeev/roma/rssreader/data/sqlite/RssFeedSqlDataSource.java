@@ -84,6 +84,14 @@ public class RssFeedSqlDataSource {
         }
     }
 
+    public boolean isEmpty(){
+        Cursor cursor = database.query(FEEDS_TABLE, null, null, null, null, null, null,
+                null);
+        boolean result = !cursor.moveToNext();
+        cursor.close();
+        return result;
+    }
+
     private void fillContentValues(RssItem rssItem){
         contentValues.clear();
         contentValues.put(LINK, rssItem.link());
